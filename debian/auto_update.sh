@@ -6,7 +6,6 @@ RED='\033[0;31m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # 无颜色
 
-echo -e "${MAGENTA}运行 auto_update.sh...${NC}"
 
 # 手动输入的配置文件
 MANUAL_FILE="/etc/sing-box/manual.conf"
@@ -20,7 +19,6 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m' # 无颜色
 
-echo -e "\${MAGENTA}运行 update-singbox.sh...${NC}"
 
 # 停止 sing-box 服务
 systemctl stop sing-box
@@ -53,8 +51,16 @@ EOF
 chmod a+x /etc/sing-box/update-singbox.sh
 
 # 提供菜单选项调整间隔时间
-read -p "请输入更新间隔小时数 (默认为12小时): " interval_choice
-interval_choice=${interval_choice:-12}
+while true; do
+    read -p "请输入更新间隔小时数 (0-23小时，默认为12小时): " interval_choice
+    interval_choice=${interval_choice:-12}
+
+    if [[ "$interval_choice" =~ ^[0-9]+$ ]] && [ "$interval_choice" -ge 0 ] && [ "$interval_choice" -le 23 ]; then
+        break
+    else
+        echo -e "${RED}输入无效，请输入0到23之间的小时数。${NC}"
+    fi
+done
 
 # 检查是否已有定时任务
 if crontab -l 2>/dev/null | grep -q '/etc/sing-box/update-singbox.sh'; then
