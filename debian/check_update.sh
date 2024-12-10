@@ -53,7 +53,7 @@ if command -v sing-box &> /dev/null; then
     echo -e "${CYAN}测试版最新版本：${NC} $beta_version"
     
     # 提供切换版本的选项
-    read -rp "是否切换版本(1: 稳定版, 2: 测试版） (当前版本: $current_version, 直接回车则不切换): " switch_choice
+    read -rp "是否切换版本(1: 稳定版, 2: 测试版） (当前版本: $current_version, 回车取消操作): " switch_choice
     if [[ "$switch_choice" -eq 1 ]]; then
         echo "选择了切换到稳定版"
         sudo apt-get install sing-box -y
