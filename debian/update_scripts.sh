@@ -7,23 +7,43 @@ NC='\033[0m' # 无颜色
 
 # 脚本下载目录
 SCRIPT_DIR="/etc/sing-box/scripts"
+TEMP_DIR="/tmp/sing-box"
 
 # 脚本的URL基础路径
 BASE_URL="https://ghp.ci/https://raw.githubusercontent.com/qichiyuhub/sbshell/refs/heads/master/debian"
 
 # 初始下载菜单脚本的URL
 MENU_SCRIPT_URL="$BASE_URL/menu.sh"
-VERSION_URL="$BASE_URL/menu.sh"
 
-# 本地脚本版本
+# 提示用户正在检测版本
+echo -e "${CYAN}正在检测版本，请耐心等待...${NC}"
+
+# 确保脚本目录和临时目录存在并设置权限
+sudo mkdir -p "$SCRIPT_DIR"
+sudo mkdir -p "$TEMP_DIR"
+sudo chown "$(whoami)":"$(whoami)" "$SCRIPT_DIR"
+sudo chown "$(whoami)":"$(whoami)" "$TEMP_DIR"
+
+# 下载远程脚本到临时目录
+wget -q -O "$TEMP_DIR/menu.sh" "$MENU_SCRIPT_URL"
+
+# 检查下载是否成功
+if ! [ -f "$TEMP_DIR/menu.sh" ]; then
+    echo -e "${RED}下载远程脚本失败，请检查网络连接。${NC}"
+    exit 1
+fi
+
+# 获取本地和远程脚本版本
 LOCAL_VERSION=$(grep '^# 版本:' "$SCRIPT_DIR/menu.sh" | awk '{print $3}')
+REMOTE_VERSION=$(grep '^# 版本:' "$TEMP_DIR/menu.sh" | awk '{print $3}')
 
-# 云端脚本版本
-REMOTE_VERSION=$(curl -s "$VERSION_URL" | grep '^# 版本:' | awk '{print $3}')
+# 输出检测到的版本
+echo -e "${CYAN}检测到的版本：本地版本 $LOCAL_VERSION,远程版本 $REMOTE_VERSION${NC}"
 
 # 比较版本号
 if [ "$LOCAL_VERSION" == "$REMOTE_VERSION" ]; then
     echo -e "${GREEN}脚本版本为最新，无需升级。${NC}"
+    rm -rf "$TEMP_DIR"
     exit 0
 else
     echo -e "${RED}检测到新版本，准备升级。${NC}"
@@ -132,3 +152,6 @@ case $update_choice in
         echo -e "${RED}无效的选择${NC}"
         ;;
 esac
+
+# 清理临时目录
+rm -rf "$TEMP_DIR"
