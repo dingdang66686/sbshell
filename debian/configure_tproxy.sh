@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # 配置参数
-TPROXY_PORT=7895  # 和 sing-box 中定义的一致
-ROUTING_MARK=666  # 和 sing-box 中定义的一致
+TPROXY_PORT=7895  # 与 sing-box 中定义的一致
+ROUTING_MARK=666  # 与 sing-box 中定义的一致
 PROXY_FWMARK=1
 PROXY_ROUTE_TABLE=100
 INTERFACE=$(ip route show default | awk '/default/ {print $5}')
 
 # 保留 IP 地址集合
-ReservedIP4='{ 127.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 198.18.0.0/15, 198.51.100.0/24, 192.88.99.0/24, 192.168.0.0/16, 203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4, 255.255.255.255/32 }'
+ReservedIP4='{ 127.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 198.18.0.0/15, 198.51.100.0/24, 192.88.99.0/24, 192.168.0.0/16, 203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4, 255.255.255.255/32 }'
 CustomBypassIP='{ 192.168.0.0/16 }'  # 自定义绕过的 IP 地址集合
 
 # 读取当前模式
@@ -75,7 +75,7 @@ table inet sing-box {
         type route hook output priority mangle; policy accept;
 
         # 放行本地回环接口流量
-        oifname "lo" accept
+        meta oifname "lo" accept
 
         # 本地 sing-box 发出的流量绕过
         meta mark $ROUTING_MARK accept
