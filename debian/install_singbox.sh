@@ -24,7 +24,7 @@ function check_network() {
 
 # 初次检测网络环境
 if ! check_network; then
-    read -p "是否执行网络更改脚本？(y/n): " network_choice
+    read -rp "是否执行网络更改脚本？(y/n): " network_choice
     if [[ "$network_choice" =~ ^[Yy]$ ]]; then
         bash "$SCRIPT_DIR/set_network.sh"
         # 再次检测网络环境
@@ -52,7 +52,7 @@ else
     sudo apt-get update -qq > /dev/null 2>&1
 
     # 提示用户是否升级系统
-    read -p "是否升级系统？(y/n): " upgrade_choice
+    read -rp "是否升级系统？(y/n): " upgrade_choice
     if [[ "$upgrade_choice" =~ ^[Yy]$ ]]; then
         echo "正在升级系统，请稍候..."
         sudo apt-get upgrade -yq > /dev/null 2>&1
@@ -60,7 +60,7 @@ else
     fi
 
     # 选择安装稳定版或测试版
-    read -p "请选择安装版本（1: 稳定版, 2: 测试版）: " version_choice
+    read -rp "请选择安装版本(1: 稳定版, 2: 测试版）: " version_choice
     if [[ "$version_choice" -eq 1 ]]; then
         echo "安装稳定版..."
         sudo apt-get install sing-box -yq > /dev/null 2>&1

@@ -14,7 +14,7 @@ NC='\033[0m' # 无颜色
 # 检查 sudo 是否安装
 if ! command -v sudo &> /dev/null; then
     echo -e "${RED}sudo 未安装。${NC}"
-    read -p "是否安装 sudo?(y/n): " install_sudo
+    read -rp "是否安装 sudo?(y/n): " install_sudo
     if [[ "$install_sudo" =~ ^[Yy]$ ]]; then
         apt-get update
         apt-get install -y sudo
@@ -24,7 +24,7 @@ if ! command -v sudo &> /dev/null; then
         fi
         echo -e "${GREEN}sudo 安装成功。${NC}"
     else
-        echo -e "${RED}由于未安装 sudo，脚本无法继续运行。${NC}"
+        echo -e "${RED}由于未安装 sudo,脚本无法继续运行。${NC}"
         exit 1
     fi
 fi
@@ -36,7 +36,7 @@ DEPENDENCIES=("wget" "nft")
 for DEP in "${DEPENDENCIES[@]}"; do
     if ! command -v $DEP &> /dev/null; then
         echo -e "${RED}$DEP 未安装。${NC}"
-        read -p "是否安装 $DEP?(y/n): " install_dep
+        read -rp "是否安装 $DEP?(y/n): " install_dep
         if [[ "$install_dep" =~ ^[Yy]$ ]]; then
             sudo apt-get update
             sudo apt-get install -y $DEP
@@ -46,7 +46,7 @@ for DEP in "${DEPENDENCIES[@]}"; do
             fi
             echo -e "${GREEN}$DEP 安装成功。${NC}"
         else
-            echo -e "${RED}由于未安装 $DEP，脚本无法继续运行。${NC}"
+            echo -e "${RED}由于未安装 $DEP,脚本无法继续运行。${NC}"
             exit 1
         fi
     fi

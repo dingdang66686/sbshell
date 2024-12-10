@@ -40,20 +40,20 @@ chmod a+x /etc/sing-box/update-singbox.sh
 
 # 提供菜单选项调整间隔时间
 while true; do
-    read -p "请输入更新间隔小时数 (1-23小时，默认为12小时): " interval_choice
+    read -rp "请输入更新间隔小时数 (1-23小时,默认为12小时): " interval_choice
     interval_choice=${interval_choice:-12}
 
     if [[ "$interval_choice" =~ ^[1-9]$|^1[0-9]$|^2[0-3]$ ]]; then
         break
     else
-        echo -e "${RED}输入无效，请输入1到23之间的小时数。${NC}"
+        echo -e "${RED}输入无效,请输入1到23之间的小时数。${NC}"
     fi
 done
 
 # 检查是否已有定时任务
 if crontab -l 2>/dev/null | grep -q '/etc/sing-box/update-singbox.sh'; then
     echo -e "${RED}检测到已有自动更新任务。${NC}"
-    read -p "是否重新设置自动更新任务？(y/n): " confirm_reset
+    read -rp "是否重新设置自动更新任务？(y/n): " confirm_reset
     if [[ "$confirm_reset" =~ ^[Yy]$ ]]; then
         crontab -l 2>/dev/null | grep -v '/etc/sing-box/update-singbox.sh' | crontab -
         echo "已删除旧的自动更新任务。"

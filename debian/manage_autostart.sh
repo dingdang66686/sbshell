@@ -6,8 +6,8 @@ RED='\033[0;31m'
 NC='\033[0m' # 无颜色
 
 echo -e "${GREEN}设置开机自启动...${NC}"
-echo "请选择操作（1: 启用自启动, 2: 禁用自启动）"
-read -p "(1/2): " autostart_choice
+echo "请选择操作(1: 启用自启动, 2: 禁用自启动）"
+read -rp "(1/2): " autostart_choice
 
 apply_firewall() {
     MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
@@ -64,8 +64,9 @@ EOF'
         sudo systemctl daemon-reload
         sudo systemctl enable nftables-singbox.service sing-box.service
         sudo systemctl start nftables-singbox.service sing-box.service
+        cmd_status=$?
 
-        if [ $? -eq 0 ]; then
+        if [ $cmd_status -eq 0 ]; then
             echo -e "${GREEN}自启动已成功启用。${NC}"
         else
             echo -e "${RED}启用自启动失败。${NC}"
@@ -95,8 +96,9 @@ EOF'
 
         # 重新加载 systemd
         sudo systemctl daemon-reload
+        cmd_status=$?
 
-        if [ $? -eq 0 ]; then
+        if [ $cmd_status -eq 0 ]; then
             echo -e "${GREEN}自启动已成功禁用。${NC}"
         else
             echo -e "${RED}禁用自启动失败。${NC}"

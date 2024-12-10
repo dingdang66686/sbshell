@@ -14,19 +14,19 @@ MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 
 while true; do
     # 提示用户输入参数
-    read -p "请输入后端地址(不填使用默认值): " BACKEND_URL
+    read -rp "请输入后端地址(不填使用默认值): " BACKEND_URL
     if [ -z "$BACKEND_URL" ]; then
         BACKEND_URL=$(grep BACKEND_URL "$DEFAULTS_FILE" | cut -d'=' -f2-)
         echo -e "${CYAN}使用默认后端地址: $BACKEND_URL${NC}"
     fi
 
-    read -p "请输入订阅地址(不填使用默认值): " SUBSCRIPTION_URL
+    read -rp "请输入订阅地址(不填使用默认值): " SUBSCRIPTION_URL
     if [ -z "$SUBSCRIPTION_URL" ]; then
         SUBSCRIPTION_URL=$(grep SUBSCRIPTION_URL "$DEFAULTS_FILE" | cut -d'=' -f2-)
         echo -e "${CYAN}使用默认订阅地址: $SUBSCRIPTION_URL${NC}"
     fi
 
-    read -p "请输入配置文件地址(不填使用默认值): " TEMPLATE_URL
+    read -rp "请输入配置文件地址(不填使用默认值): " TEMPLATE_URL
     if [ -z "$TEMPLATE_URL" ]; then
         if [ "$MODE" = "TProxy" ]; then
             TEMPLATE_URL=$(grep TPROXY_TEMPLATE_URL "$DEFAULTS_FILE" | cut -d'=' -f2-)
@@ -46,7 +46,7 @@ while true; do
     echo "订阅地址: $SUBSCRIPTION_URL"
     echo "配置文件地址: $TEMPLATE_URL"
 
-    read -p "确认输入的配置信息？(y/n): " confirm_choice
+    read -rp "确认输入的配置信息？(y/n): " confirm_choice
     if [[ "$confirm_choice" =~ ^[Yy]$ ]]; then
         # 更新手动输入的配置文件
         cat > "$MANUAL_FILE" <<EOF
@@ -72,7 +72,7 @@ EOF
                 break
             else
                 echo "配置文件下载失败"
-                read -p "下载失败，是否重试？(y/n): " retry_choice
+                read -rp "下载失败，是否重试？(y/n): " retry_choice
                 if [[ "$retry_choice" =~ ^[Nn]$ ]]; then
                     exit 1
                 fi

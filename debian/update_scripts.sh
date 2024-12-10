@@ -93,12 +93,12 @@ function reset_update() {
 echo -e "${CYAN}请选择更新方式：${NC}"
 echo -e "${GREEN}1. 常规更新${NC}"
 echo -e "${GREEN}2. 重置更新${NC}"
-read -p "请选择操作: " update_choice
+read -rp "请选择操作: " update_choice
 
 case $update_choice in
     1)
         echo -e "${RED}常规更新只更新脚本内容,再次执行菜单内容才会执行新脚本.${NC}"
-        read -p "是否继续常规更新？(y/n): " confirm
+        read -rp "是否继续常规更新？(y/n): " confirm
         if [[ "$confirm" =~ ^[Yy]$ ]]; then
             regular_update
         else
@@ -107,7 +107,7 @@ case $update_choice in
         ;;
     2)
         echo -e "${RED}即将停止 sing-box 并重置所有内容,并初始化引导设置.${NC}"
-        read -p "是否继续重置更新？(y/n): " confirm
+        read -rp "是否继续重置更新？(y/n): " confirm
         if [[ "$confirm" =~ ^[Yy]$ ]]; then
             reset_update
         else

@@ -35,8 +35,8 @@ start_singbox() {
     STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "https://www.google.com")
 
     if [ "$STATUS_CODE" -eq 200 ]; then
-        echo -e "${RED}当前网络处于代理环境，启动singbox需要直连，请设置!${NC}"
-        read -p "是否执行网络设置脚本？(y/n): " network_choice
+        echo -e "${RED}当前网络处于代理环境,启动singbox需要直连,请设置!${NC}"
+        read -rp "是否执行网络设置脚本？(y/n): " network_choice
         if [[ "$network_choice" =~ ^[Yy]$ ]]; then
             bash "$SCRIPT_DIR/set_network.sh"
             STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "https://www.google.com")
@@ -66,7 +66,7 @@ start_singbox() {
 }
 
 # 提示用户确认是否启动
-read -p "是否启动 sing-box？(y/n): " confirm_start
+read -rp "是否启动 sing-box?(y/n): " confirm_start
 if [[ "$confirm_start" =~ ^[Yy]$ ]]; then
     start_singbox
 else

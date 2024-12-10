@@ -21,29 +21,22 @@ function stop_singbox() {
     fi
 }
 
-# 清理防火墙规则
-function clean_firewall() {
-    sudo bash /etc/sing-box/scripts/clean_nft.sh
-}
-
 # 切换模式的逻辑
 echo "切换模式开始...请根据提示输入操作。"
 
 # 选择模式
-read -p "请选择模式（1: TProxy 模式, 2: TUN 模式）: " mode_choice
+read -rp "请选择模式(1: TProxy 模式, 2: TUN 模式）: " mode_choice
 
 case $mode_choice in
     1)
         stop_singbox
-        clean_firewall
         echo "MODE=TProxy" | sudo tee /etc/sing-box/mode.conf > /dev/null
-        echo -e "${GREEN}当前选择模式为：TProxy 模式${NC}"
+        echo -e "${GREEN}当前选择模式为:TProxy 模式${NC}"
         ;;
     2)
         stop_singbox
-        clean_firewall
         echo "MODE=TUN" | sudo tee /etc/sing-box/mode.conf > /dev/null
-        echo -e "${GREEN}当前选择模式为：TUN 模式${NC}"
+        echo -e "${GREEN}当前选择模式为:TUN 模式${NC}"
         ;;
     *)
         echo -e "${RED}无效的选择${NC}"

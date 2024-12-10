@@ -18,7 +18,7 @@ MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 clearSingboxRules() {
     nft list table inet sing-box >/dev/null 2>&1 && nft delete table inet sing-box
     ip rule del fwmark $PROXY_FWMARK lookup $PROXY_ROUTE_TABLE 2>/dev/null
-    ip route del local default dev $INTERFACE table $PROXY_ROUTE_TABLE 2>/dev/null
+    ip route del local default dev "$INTERFACE" table $PROXY_ROUTE_TABLE 2>/dev/null
     echo "清理 sing-box 相关的防火墙规则"
 }
 
@@ -30,7 +30,7 @@ if [ "$MODE" = "TProxy" ]; then
 
     # 设置 IP 规则和路由
     ip -f inet rule add fwmark $PROXY_FWMARK lookup $PROXY_ROUTE_TABLE
-    ip -f inet route add local default dev $INTERFACE table $PROXY_ROUTE_TABLE
+    ip -f inet route add local default dev "$INTERFACE" table $PROXY_ROUTE_TABLE
     sysctl -w net.ipv4.ip_forward=1 > /dev/null
 
     # 确保目录存在

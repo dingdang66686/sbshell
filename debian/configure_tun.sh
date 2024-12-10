@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # 配置参数
-TPROXY_PORT=7895  # 和 sing-box 中定义的一致
-ROUTING_MARK=666  # 和 sing-box 中定义的一致
 PROXY_FWMARK=1
 PROXY_ROUTE_TABLE=100
 INTERFACE=$(ip route show default | awk '/default/ {print $5}')
@@ -14,7 +12,7 @@ MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 clearTProxyRules() {
     nft list table inet sing-box >/dev/null 2>&1 && nft delete table inet sing-box
     ip rule del fwmark $PROXY_FWMARK lookup $PROXY_ROUTE_TABLE 2>/dev/null
-    ip route del local default dev $INTERFACE table $PROXY_ROUTE_TABLE 2>/dev/null
+    ip route del local default dev "$INTERFACE" table $PROXY_ROUTE_TABLE 2>/dev/null
     echo "清理 TProxy 模式的防火墙规则"
 }
 

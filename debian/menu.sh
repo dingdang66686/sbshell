@@ -8,8 +8,6 @@
 
 # 定义颜色
 CYAN='\033[0;36m'
-MAGENTA='\033[0;35m'
-BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
@@ -138,10 +136,9 @@ if [ ! -f "$INITIALIZED_FILE" ]; then
     initialize
 fi
 
-# 添加别名到 .bashrc
+# 添加别名到 .bashrc，如果已存在则不再添加
 if ! grep -q "alias sb=" ~/.bashrc; then
     echo "alias sb='bash $SCRIPT_DIR/menu.sh menu'" >> ~/.bashrc
-    source ~/.bashrc
 fi
 
 # 创建快捷脚本
@@ -165,12 +162,12 @@ show_menu() {
     echo -e "${GREEN}10. 常用命令${NC}"
     echo -e "${GREEN}11. 更新脚本${NC}"
     echo -e "${GREEN}0. 退出${NC}"
-    echo -e "${CYAN}===========  作者： 七尺宇  ===========${NC}"
+    echo -e "${CYAN}=======================================${NC}"
 }
 
 # 处理用户选择
 handle_choice() {
-    read -p "请选择操作: " choice
+    read -rp "请选择操作: " choice
     case $choice in
         1)
             bash "$SCRIPT_DIR/switch_mode.sh"
