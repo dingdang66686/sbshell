@@ -13,6 +13,21 @@ BASE_URL="https://ghp.ci/https://raw.githubusercontent.com/qichiyuhub/sbshell/re
 
 # 初始下载菜单脚本的URL
 MENU_SCRIPT_URL="$BASE_URL/menu.sh"
+VERSION_URL="$BASE_URL/menu.sh"
+
+# 本地脚本版本
+LOCAL_VERSION=$(grep '^# 版本:' "$SCRIPT_DIR/menu.sh" | awk '{print $3}')
+
+# 云端脚本版本
+REMOTE_VERSION=$(curl -s "$VERSION_URL" | grep '^# 版本:' | awk '{print $3}')
+
+# 比较版本号
+if [ "$LOCAL_VERSION" == "$REMOTE_VERSION" ]; then
+    echo -e "${GREEN}脚本版本为最新，无需升级。${NC}"
+    exit 0
+else
+    echo -e "${RED}检测到新版本，准备升级。${NC}"
+fi
 
 # 脚本列表
 SCRIPTS=(
@@ -38,18 +53,17 @@ SCRIPTS=(
 )
 
 # 下载并设置单个脚本，带重试逻辑
-function download_script() {
+download_script() {
     local SCRIPT="$1"
     local RETRIES=3
     local RETRY_DELAY=5
 
     for ((i=1; i<=RETRIES; i++)); do
-        wget -q -O "$SCRIPT_DIR/$SCRIPT" "$BASE_URL/$SCRIPT"
-        if [ $? -eq 0 ]; then
+        if wget -q -O "$SCRIPT_DIR/$SCRIPT" "$BASE_URL/$SCRIPT"; then
             chmod +x "$SCRIPT_DIR/$SCRIPT"
             return 0
         else
-            sleep $RETRY_DELAY
+            sleep "$RETRY_DELAY"
         fi
     done
 
@@ -58,15 +72,15 @@ function download_script() {
 }
 
 # 并行下载脚本
-function parallel_download_scripts() {
+parallel_download_scripts() {
     local pids=()
     for SCRIPT in "${SCRIPTS[@]}"; do
         download_script "$SCRIPT" &
-        pids+=($!)
+        pids+=("$!")
     done
 
     for pid in "${pids[@]}"; do
-        wait $pid
+        wait "$pid"
     done
 }
 
