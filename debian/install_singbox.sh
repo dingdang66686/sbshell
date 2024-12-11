@@ -52,12 +52,24 @@ else
     sudo apt-get update -qq > /dev/null 2>&1
 
     # 提示用户是否升级系统
-    read -rp "是否升级系统？(y/n): " upgrade_choice
-    if [[ "$upgrade_choice" =~ ^[Yy]$ ]]; then
-        echo "正在升级系统，请稍候..."
-        sudo apt-get upgrade -yq > /dev/null 2>&1
-        echo "升级已完成"
-    fi
+    while true; do
+        read -rp "是否升级系统？(y/n): " upgrade_choice
+        case $upgrade_choice in
+            [Yy]*)
+                echo "正在升级系统，请稍候..."
+                sudo apt-get upgrade -yq > /dev/null 2>&1
+                echo "升级已完成"
+                break
+                ;;
+            [Nn]*)
+                echo "跳过系统升级。"
+                break
+                ;;
+            *)
+                echo -e "${RED}无效的选择，请输入 y 或 n。${NC}"
+                ;;
+        esac
+    done
 
     # 选择安装稳定版或测试版
     while true; do
