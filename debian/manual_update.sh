@@ -2,6 +2,7 @@
 
 # 定义颜色
 CYAN='\033[0;36m'
+GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # 无颜色
 
@@ -11,9 +12,6 @@ DEFAULTS_FILE="/etc/sing-box/defaults.conf"
 
 # 获取当前模式
 MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
-
-# 停止 sing-box 服务
-systemctl stop sing-box
 
 # 提示用户是否更换订阅
 read -rp "是否更换订阅地址？(y/n): " change_subscription
@@ -87,14 +85,23 @@ echo "生成完整订阅链接: $FULL_URL"
 # 备份现有配置文件
 [ -f "/etc/sing-box/config.json" ] && cp /etc/sing-box/config.json /etc/sing-box/config.json.backup
 
-# 下载并验证配置文件
 if curl -L --connect-timeout 10 --max-time 30 "$FULL_URL" -o /etc/sing-box/config.json; then
-    echo "配置文件下载完成，并验证成功！"
+    echo -e "${GREEN}配置文件更新成功!${NC}"
     if ! sing-box check -c /etc/sing-box/config.json; then
-        echo "配置文件验证失败，恢复备份..."
+        echo -e "${RED}配置文件验证失败，恢复备份...${NC}"
         [ -f "/etc/sing-box/config.json.backup" ] && cp /etc/sing-box/config.json.backup /etc/sing-box/config.json
     fi
 else
-    echo "配置文件下载失败，恢复备份..."
+    echo -e "${RED}配置文件下载失败，恢复备份...${NC}"
     [ -f "/etc/sing-box/config.json.backup" ] && cp /etc/sing-box/config.json.backup /etc/sing-box/config.json
+fi
+
+
+# 重启sing-box并检查启动状态
+sudo systemctl restart sing-box
+
+if systemctl is-active --quiet sing-box; then
+    echo -e "${GREEN}sing-box 启动成功${NC}"
+else
+    echo -e "${RED}sing-box 启动失败${NC}"
 fi

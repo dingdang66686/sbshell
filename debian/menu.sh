@@ -175,7 +175,6 @@ handle_choice() {
             ;;
         2)
             bash "$SCRIPT_DIR/manual_update.sh"
-            bash "$SCRIPT_DIR/start_singbox.sh"
             ;;
         3)
             bash "$SCRIPT_DIR/auto_update.sh"
