@@ -37,6 +37,9 @@ https://ghp.ci/https://raw.githubusercontent.com/qichiyuhub/sbshell/refs/heads/m
 tun：
 https://ghp.ci/https://raw.githubusercontent.com/qichiyuhub/sbshell/refs/heads/master/config_template/config_tun.json  
 
+## Youtube视频教程：
+https://youtu.be/aoSHzRitvC8
+
 ## 其他问题：
 
 **请查看[wiki](https://github.com/qichiyuhub/sbshell/wiki)**
