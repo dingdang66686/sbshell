@@ -2,7 +2,7 @@
 
 #################################################
 # 描述: Debian/Ubuntu/Armbian 官方sing-box 全自动脚本
-# 版本: 1.2.3
+# 版本: 1.2.4
 # 作者: Youtube: 七尺宇
 #################################################
 
@@ -161,7 +161,7 @@ show_menu() {
     echo -e "${GREEN}4. 手动启动 sing-box${NC}"
     echo -e "${GREEN}5. 手动停止 sing-box${NC}"
     echo -e "${GREEN}6. 安装/更新 sing-box${NC}"
-    echo -e "${GREEN}7. 修改默认配置参数${NC}"
+    echo -e "${GREEN}7. 默认参数设置${NC}"
     echo -e "${GREEN}8. 设置自启动${NC}"
     echo -e "${GREEN}9. 网络设置(只支持debian)${NC}"
     echo -e "${GREEN}10. 常用命令${NC}"
