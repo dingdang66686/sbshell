@@ -54,14 +54,13 @@ start_singbox() {
         echo -e "${CYAN}当前网络环境非代理网络，可以启动 sing-box。${NC}"
     fi
 
-    apply_firewall
-
     sudo systemctl restart sing-box &>/dev/null
 
     if systemctl is-active --quiet sing-box; then
         echo -e "${GREEN}sing-box 启动成功${NC}"
         mode=$(check_mode)
         echo -e "${MAGENTA}当前启动模式: ${mode}${NC}"
+        apply_firewall
     else
         echo -e "${RED}sing-box 启动失败，请检查日志${NC}"
     fi
