@@ -21,11 +21,20 @@ function check_config() {
     read -rp "按回车键返回二级菜单..."
 }
 
+# 查看实时日志
+function view_logs() {
+    echo -e "${YELLOW}日志生成中，请等待...${NC}"
+    echo -e "${RED}按 Ctrl + C 结束日志输出${NC}"
+    logread -f | grep sing-box
+    read -rp "按回车键返回二级菜单..."
+}
+
 # 二级菜单选项
 function show_submenu() {
     echo -e "${CYAN}=========== 二级菜单选项 ===========${NC}"
     echo -e "${MAGENTA}1. 查看防火墙规则${NC}"
     echo -e "${MAGENTA}2. 检查配置文件${NC}"
+    echo -e "${MAGENTA}3. 查看实时日志${NC}"
     echo -e "${MAGENTA}0. 返回主菜单${NC}"
     echo -e "${CYAN}===================================${NC}"
 }
@@ -37,6 +46,7 @@ function handle_submenu_choice() {
         case $choice in
             1) view_firewall_rules ;;
             2) check_config ;;
+            3) view_logs ;;
             0) return 0 ;;
             *) echo -e "${RED}无效的选择${NC}" ;;
         esac
