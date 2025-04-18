@@ -3,7 +3,6 @@
 #################################################
 # 描述: OpenWRT 官方sing-box 全自动脚本
 # 版本: 2.1.0
-# 作者: Youtube: 七尺宇
 #################################################
 
 # 定义颜色
@@ -17,15 +16,14 @@ NC='\033[0m' # 无颜色
 SCRIPT_DIR="/etc/sing-box/scripts"
 INITIALIZED_FILE="$SCRIPT_DIR/.initialized"
 
-# 确保脚本目录存在并设置权限
 mkdir -p "$SCRIPT_DIR"
 if ! grep -qi 'openwrt' /etc/os-release; then
     chown "$(whoami)":"$(whoami)" "$SCRIPT_DIR"
 fi
 
 # 脚本的URL基础路径
-BASE_URL="https://gh-proxy.com/https://raw.githubusercontent.com/qichiyuhub/sbshell/refs/heads/main/openwrt"
-
+BASE_URL="https://gh-proxy.com/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/openwrt"
+                               
 # 脚本列表
 SCRIPTS=(
     "check_environment.sh"     # 检查系统环境
@@ -81,7 +79,6 @@ parallel_download_scripts() {
     done
 }
 
-# 检查脚本完整性并下载缺失的脚本
 check_and_download_scripts() {
     local missing_scripts=()
     for SCRIPT in "${SCRIPTS[@]}"; do
@@ -159,7 +156,6 @@ if [ ! -f /usr/bin/sb ]; then
     chmod +x /usr/bin/sb
 fi
 
-# 菜单显示
 show_menu() {
     echo -e "${CYAN}=========== Sbshell 管理菜单 ===========${NC}"
     echo -e "${GREEN}1. Tproxy/Tun模式切换${NC}"
@@ -176,7 +172,6 @@ show_menu() {
     echo -e "${CYAN}=======================================${NC}"
 }
 
-# 处理用户选择
 handle_choice() {
     read -rp "请选择操作: " choice
     case $choice in

@@ -17,7 +17,6 @@ mkdir -p /etc/sing-box/
 [ -f /etc/sing-box/mode.conf ] || touch /etc/sing-box/mode.conf
 chmod 777 /etc/sing-box/mode.conf
 
-# 切换模式的逻辑
 echo "切换模式开始...请根据提示输入操作。"
 
 

@@ -67,14 +67,12 @@ prompt_user_input() {
     done
 }
 
-# 提示用户是否更换订阅
 read -rp "是否更换订阅地址？(y/n): " change_subscription
 if [[ "$change_subscription" =~ ^[Yy]$ ]]; then
     # 执行手动输入相关内容
     while true; do
         prompt_user_input
 
-        # 显示用户输入的配置信息
         echo -e "${CYAN}你输入的配置信息如下:${NC}"
         echo "后端地址: $BACKEND_URL"
         echo "订阅地址: $SUBSCRIPTION_URL"

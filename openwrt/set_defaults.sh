@@ -2,7 +2,6 @@
 
 DEFAULTS_FILE="/etc/sing-box/defaults.conf"
 
-# 提示用户输入参数，如果为空则使用默认值
 read -rp "请输入后端地址: " BACKEND_URL
 BACKEND_URL=${BACKEND_URL:-$(grep BACKEND_URL $DEFAULTS_FILE | cut -d '=' -f2)}
 

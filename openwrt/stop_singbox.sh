@@ -19,7 +19,6 @@ stop_singbox() {
         echo -e "${GREEN}sing-box 已成功停止。${NC}"
     fi
 
-    # 提示用户确认是否清理防火墙规则
     read -rp "是否清理防火墙规则？(y/n): " confirm_cleanup
     if [[ "$confirm_cleanup" =~ ^[Yy]$ ]]; then
         echo -e "${CYAN}执行清理防火墙规则...${NC}"
@@ -30,7 +29,6 @@ stop_singbox() {
     fi
 }
 
-# 提示用户确认是否停止
 read -rp "是否停止 sing-box?(y/n): " confirm_stop
 if [[ "$confirm_stop" =~ ^[Yy]$ ]]; then
     stop_singbox

@@ -12,7 +12,6 @@ DEFAULTS_FILE="/etc/sing-box/defaults.conf"
 # 获取当前模式
 MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
 
-# 提示用户输入参数的函数
 prompt_user_input() {
     read -rp "请输入后端地址(回车使用默认值可留空): " BACKEND_URL
     if [ -z "$BACKEND_URL" ]; then
@@ -44,7 +43,6 @@ prompt_user_input() {
 while true; do
     prompt_user_input
 
-    # 显示用户输入的配置信息
     echo -e "${CYAN}你输入的配置信息如下:${NC}"
     echo "后端地址: $BACKEND_URL"
     echo "订阅地址: $SUBSCRIPTION_URL"

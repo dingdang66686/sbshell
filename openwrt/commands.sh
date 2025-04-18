@@ -7,21 +7,18 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # 无颜色
 
-# 查看防火墙规则
 function view_firewall_rules() {
     echo -e "${YELLOW}查看防火墙规则...${NC}"
     nft list ruleset
     read -rp "按回车键返回二级菜单..."
 }
 
-# 检查配置文件
 function check_config() {
     echo -e "${YELLOW}检查配置文件...${NC}"
     bash /etc/sing-box/scripts/check_config.sh
     read -rp "按回车键返回二级菜单..."
 }
 
-# 查看实时日志
 function view_logs() {
     echo -e "${YELLOW}日志生成中，请等待...${NC}"
     echo -e "${RED}按 Ctrl + C 结束日志输出${NC}"
@@ -29,7 +26,6 @@ function view_logs() {
     read -rp "按回车键返回二级菜单..."
 }
 
-# 二级菜单选项
 function show_submenu() {
     echo -e "${CYAN}=========== 二级菜单选项 ===========${NC}"
     echo -e "${MAGENTA}1. 查看防火墙规则${NC}"
@@ -39,7 +35,6 @@ function show_submenu() {
     echo -e "${CYAN}===================================${NC}"
 }
 
-# 处理用户输入
 function handle_submenu_choice() {
     while true; do
         read -rp "请选择操作: " choice
