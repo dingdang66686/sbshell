@@ -7,35 +7,31 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # 无颜色
 
-# 查看防火墙规则
+
 function view_firewall_rules() {
     echo -e "${YELLOW}查看防火墙规则...${NC}"
     sudo nft list ruleset
     read -rp "按回车键返回二级菜单..."
 }
 
-# 显示日志
 function view_logs() {
     echo -e "${YELLOW}显示日志...${NC}"
     sudo journalctl -u sing-box --output cat -e
     read -rp "按回车键返回二级菜单..."
 }
 
-# 实时日志
 function live_logs() {
     echo -e "${YELLOW}实时日志...${NC}"
     sudo journalctl -u sing-box -f --output=cat
     read -rp "按回车键返回二级菜单..."
 }
 
-# 检查配置文件
 function check_config() {
     echo -e "${YELLOW}检查配置文件...${NC}"
     bash /etc/sing-box/scripts/check_config.sh
     read -rp "按回车键返回二级菜单..."
 }
 
-# 二级菜单选项
 function show_submenu() {
     echo -e "${CYAN}=========== 二级菜单选项 ===========${NC}"
     echo -e "${MAGENTA}1. 查看防火墙规则${NC}"
@@ -46,7 +42,6 @@ function show_submenu() {
     echo -e "${CYAN}===================================${NC}"
 }
 
-# 处理用户输入
 function handle_submenu_choice() {
     while true; do
         read -rp "请选择操作: " choice
@@ -63,7 +58,6 @@ function handle_submenu_choice() {
     return 0  # 确保函数结束时返回 0
 }
 
-# 显示并处理二级菜单
 menu_active=true
 while $menu_active; do
     show_submenu

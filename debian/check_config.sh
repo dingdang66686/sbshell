@@ -7,10 +7,10 @@ NC='\033[0m' # No Color
 
 CONFIG_FILE="/etc/sing-box/config.json"
 
-# 检查配置文件是否存在
+
 if [ -f "$CONFIG_FILE" ]; then
     echo -e "${CYAN}检查配置文件 ${CONFIG_FILE} ...${NC}"
-    # 验证配置文件
+    
     if sing-box check -c "$CONFIG_FILE"; then
         echo -e "${CYAN}配置文件验证通过！${NC}"
     else

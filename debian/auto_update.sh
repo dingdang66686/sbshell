@@ -40,7 +40,7 @@ EOF
 
 chmod a+x /etc/sing-box/update-singbox.sh
 
-# 提供菜单选项调整间隔时间或取消自动更新
+
 while true; do
     echo -e "${CYAN}请选择操作:${NC}"
     echo "1. 设置自动更新间隔"
@@ -60,7 +60,7 @@ while true; do
             fi
         done
 
-        # 检查是否已有定时任务
+        
         if crontab -l 2>/dev/null | grep -q '/etc/sing-box/update-singbox.sh'; then
             echo -e "${RED}检测到已有自动更新任务。${NC}"
             read -rp "是否重新设置自动更新任务？(y/n): " confirm_reset

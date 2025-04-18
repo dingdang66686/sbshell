@@ -13,7 +13,7 @@ DEFAULTS_FILE="/etc/sing-box/defaults.conf"
 # 获取当前模式
 MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 
-# 提示用户是否更换订阅的函数
+
 prompt_user_input() {
     while true; do
         read -rp "请输入后端地址(不填使用默认值): " BACKEND_URL
@@ -67,14 +67,13 @@ prompt_user_input() {
     done
 }
 
-# 提示用户是否更换订阅
+
 read -rp "是否更换订阅地址？(y/n): " change_subscription
 if [[ "$change_subscription" =~ ^[Yy]$ ]]; then
     # 执行手动输入相关内容
     while true; do
         prompt_user_input
 
-        # 显示用户输入的配置信息
         echo -e "${CYAN}你输入的配置信息如下:${NC}"
         echo "后端地址: $BACKEND_URL"
         echo "订阅地址: $SUBSCRIPTION_URL"
@@ -82,7 +81,7 @@ if [[ "$change_subscription" =~ ^[Yy]$ ]]; then
 
         read -rp "确认输入的配置信息？(y/n): " confirm_choice
         if [[ "$confirm_choice" =~ ^[Yy]$ ]]; then
-            # 更新手动输入的配置文件
+           
             cat > "$MANUAL_FILE" <<EOF
 BACKEND_URL=$BACKEND_URL
 SUBSCRIPTION_URL=$SUBSCRIPTION_URL

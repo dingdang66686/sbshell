@@ -3,7 +3,6 @@
 #################################################
 # 描述: Debian/Ubuntu/Armbian 官方sing-box 全自动脚本
 # 版本: 2.1.0
-# 作者: Youtube: 七尺宇
 #################################################
 
 # 定义颜色
@@ -22,8 +21,8 @@ sudo mkdir -p "$SCRIPT_DIR"
 sudo chown "$(whoami)":"$(whoami)" "$SCRIPT_DIR"
 
 # 脚本的URL基础路径
-BASE_URL="https://gh-proxy.com/https://raw.githubusercontent.com/qichiyuhub/sbshell/refs/heads/main/debian"
-
+BASE_URL="https://gh-proxy.com/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/debian"
+                               
 # 脚本列表
 SCRIPTS=(
     "check_environment.sh"     # 检查系统环境
