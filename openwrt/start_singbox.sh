@@ -20,14 +20,14 @@ check_mode() {
 }
 
 # 应用防火墙规则
-apply_firewall() {
-    MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
-    if [ "$MODE" = "TProxy" ]; then
-        bash "$SCRIPT_DIR/configure_tproxy.sh"
-    elif [ "$MODE" = "TUN" ]; then
-        bash "$SCRIPT_DIR/configure_tun.sh"
-    fi
-}
+#apply_firewall() {
+#    MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
+#    if [ "$MODE" = "TProxy" ]; then
+#        bash "$SCRIPT_DIR/configure_tproxy.sh"
+#    elif [ "$MODE" = "TUN" ]; then
+#        bash "$SCRIPT_DIR/configure_tun.sh"
+#    fi
+#}
 
 # 启动 sing-box 服务
 start_singbox() {
