@@ -126,7 +126,7 @@ Signed-By: /etc/apt/keyrings/sagernet.asc
                 echo "未找到服务文件：$service_file"
             fi
         else
-            echo "当前 sing-box 版本不是 1.11.x，跳过处理。"
+            echo "当前 sing-box 版本非 1.11.x，跳过处理。"
     fi 
         # 重启 sing-box 服务
         sudo systemctl daemon-reload
