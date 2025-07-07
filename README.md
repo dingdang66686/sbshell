@@ -25,6 +25,7 @@ bash <(curl -sL https://ghfast.top/https://raw.githubusercontent.com/qljsyph/sbs
 - 初始化运行结束，输入“**sb**”进入菜单
 - 目前支持系统为deiban/ubuntu/armbian/openwrt。  
 - 防火墙仅支持nftables，不支持iptables。
+- 非openwrt并使用2.1.2之前版本的用户想要升级并且使用1.12.X版本内核建议卸载重装
 
 ### 系统信息自动显示美化脚本： 
 ```
