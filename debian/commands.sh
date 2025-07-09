@@ -32,12 +32,84 @@ function check_config() {
     read -rp "按回车键返回二级菜单..."
 }
 
+function setup_singbox_permissions() {
+    echo -e "${YELLOW}正在设置 sing-box 权限与服务...${NC}"
+
+    if ! id sing-box &>/dev/null; then
+        echo "正在创建 sing-box 系统用户"
+        sudo useradd --system --no-create-home --shell /usr/sbin/nologin sing-box
+    fi
+
+    echo "正在设置 sing-box 权限..."
+    sudo mkdir -p /var/lib/sing-box
+    sudo chown -R sing-box:sing-box /var/lib/sing-box
+    sudo chown -R sing-box:sing-box /etc/sing-box
+    sudo chmod 770 /etc/sing-box
+
+    version_output=$(sing-box version 2>/dev/null)
+    version=$(echo "$version_output" | grep -oE '1\.11\.[0-9]+')
+
+    if [[ -n "$version" ]]; then
+        echo "检测到 sing-box 版本为 $version"
+        service_file="/lib/systemd/system/sing-box.service"
+
+        if [[ -f "$service_file" ]]; then
+            echo "找到 sing-box 服务文件：$service_file"
+            has_user=$(grep -E '^\s*User=sing-box' "$service_file")
+            has_state=$(grep -E '^\s*StateDirectory=sing-box' "$service_file")
+
+            if [[ -n "$has_user" && -n "$has_state" ]]; then
+                echo "[Service] 段中已经包含 User=sing-box 和 StateDirectory=sing-box，无需修改。"
+            else
+                echo "准备插入缺失配置..."
+                awk -v add_user="$([[ -z "$has_user" ]] && echo 1 || echo 0)" \
+                    -v add_state="$([[ -z "$has_state" ]] && echo 1 || echo 0)" '
+                    BEGIN { in_service=0 }
+                    {
+                        print
+                        if ($0 ~ /^\[Service\]/) {
+                            in_service = 1
+                            next
+                        }
+
+                        if (in_service == 1) {
+                            if (add_user == 1) {
+                                print "User=sing-box"
+                                if (add_state == 1) {
+                                    print "StateDirectory=sing-box"
+                                    add_state = 0
+                                }
+                                add_user = 0
+                            } else if (add_state == 1 && $0 ~ /^User=sing-box/) {
+                                print
+                                print "StateDirectory=sing-box"
+                                add_state = 0
+                                next
+                            }
+                        }
+                    }
+                ' "$service_file" > "${service_file}.tmp" && sudo mv "${service_file}.tmp" "$service_file"
+
+                echo "修改完成，执行 systemctl daemon-reexec"
+                sudo systemctl daemon-reexec
+            fi
+        else
+            echo "未找到服务文件：$service_file"
+        fi
+    else
+        echo "当前 sing-box 版本非 1.11.x，跳过处理。"
+    fi
+
+    read -rp "按回车键返回二级菜单..."
+}
+
 function show_submenu() {
     echo -e "${CYAN}=========== 二级菜单选项 ===========${NC}"
     echo -e "${MAGENTA}1. 查看防火墙规则${NC}"
     echo -e "${MAGENTA}2. 显示日志${NC}"
     echo -e "${MAGENTA}3. 实时日志${NC}"
     echo -e "${MAGENTA}4. 检查配置文件${NC}"
+    echo -e "${MAGENTA}5. 设置 sing-box 权限与服务（执行前查阅wiki）${NC}"
     echo -e "${MAGENTA}0. 返回主菜单${NC}"
     echo -e "${CYAN}===================================${NC}"
 }
@@ -50,6 +122,7 @@ function handle_submenu_choice() {
             2) view_logs ;;
             3) live_logs ;;
             4) check_config ;;
+            5) setup_singbox_permissions ;;
             0) return 0 ;;
             *) echo -e "${RED}无效的选择${NC}" ;;
         esac
