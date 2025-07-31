@@ -12,7 +12,6 @@ TEMP_DIR="/tmp/sing-box"
 
 # 脚本的URL基础路径
 BASE_URL="https://ghfast.top/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/debian"
-                               
 # 初始下载菜单脚本的URL
 MENU_SCRIPT_URL="$BASE_URL/menu.sh"
 
@@ -97,6 +96,11 @@ SCRIPTS=(
     "update_scripts.sh"
     "update_ui.sh"
     "delaytest.sh"
+    "update_config.sh"
+    "setup.sh"
+    "ufw.sh"
+    "kernel.sh"
+    "optimize.sh"  
     "menu.sh"
 )
 
