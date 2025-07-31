@@ -245,7 +245,7 @@ setup_alias() {
 
 # 客户端菜单
 show_client_menu() {
-    echo -e "\n${CYAN}================= 客户端管理菜单 =================${NC}"
+    echo -e "\n${CYAN}================= sbshell客户端管理菜单 =================${NC}"
     echo -e "${BOLD}${LIGHT_BLUE}--- 配置管理 ---${NC}"
     echo -e "${LIGHT_BLUE} 1. 模式切换与配置${NC}"
     echo -e "${LIGHT_BLUE} 2. 手动更新配置${NC}"
@@ -298,7 +298,7 @@ handle_client_choice() {
 
 # 服务端菜单
 show_server_menu() {
-    echo -e "\n${CYAN}================= 服务端管理菜单 =================${NC}"
+    echo -e "\n${CYAN}================= sbshell服务端管理菜单 =================${NC}"
     echo -e "${BOLD}${LIGHT_PURPLE}--- 服务控制 ---${NC}"
     echo -e "${LIGHT_PURPLE} 1. 启动sing-box${NC}"
     echo -e "${LIGHT_PURPLE} 2. 停止sing-box${NC}"
