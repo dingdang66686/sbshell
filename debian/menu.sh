@@ -11,7 +11,12 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+WHITE='\033[1;37m'
+BOLD='\033[1m'
+LIGHT_PURPLE='\033[1;35m'
+LIGHT_BLUE='\033[1;34m'
 NC='\033[0m'
+
 SCRIPT_DIR="/etc/sing-box/scripts"
 INITIALIZED_FILE="$SCRIPT_DIR/.initialized"
 ROLE_FILE="$SCRIPT_DIR/.role"
@@ -241,20 +246,20 @@ setup_alias() {
 # 客户端菜单
 show_client_menu() {
     echo -e "\n${CYAN}================= 客户端管理菜单 =================${NC}"
-    echo -e "${YELLOW}--- 配置管理 ---${NC}"
+    echo -e "${BOLD}${LIGHT_BLUE}--- 配置管理 ---${NC}"
     echo -e "${GREEN} 1. 模式切换与配置${NC}"
     echo -e "${GREEN} 2. 手动更新配置${NC}"
     echo -e "${GREEN} 3. 自动更新配置${NC}"
     echo -e "${GREEN} 4. 设置默认参数${NC}"
-    echo -e "${YELLOW}--- 服务控制 ---${NC}"
+    echo -e "${BOLD}${LIGHT_PURPLE}--- 服务控制 ---${NC}"
     echo -e "${GREEN} 5. 启动sing-box${NC}"
     echo -e "${GREEN} 6. 停止sing-box${NC}"
     echo -e "${GREEN} 7. 管理自启动${NC}"
-    echo -e "${YELLOW}--- 更新与维护 ---${NC}"
+    echo -e "${BOLD}${YELLOW}--- 更新与维护 ---${NC}"
     echo -e "${GREEN} 8. 更新sing-box${NC}"
     echo -e "${GREEN} 9. 更新脚本${NC}"
     echo -e "${GREEN}10. 更新面板${NC}"
-    echo -e "${YELLOW}--- 系统与网络 ---${NC}"
+    echo -e "${BOLD}${WHITE}--- 系统与网络 ---${NC}"
     echo -e "${GREEN}11. 网络设置${NC}"
     echo -e "${GREEN}12. 常用命令${NC}"
     echo -e "${GREEN}13. 更换XanMod内核${NC}"
@@ -294,18 +299,18 @@ handle_client_choice() {
 # 服务端菜单
 show_server_menu() {
     echo -e "\n${CYAN}================= 服务端管理菜单 =================${NC}"
-    echo -e "${YELLOW}--- 服务控制 ---${NC}"
+    echo -e "${BOLD}${LIGHT_PURPLE}--- 服务控制 ---${NC}"
     echo -e "${GREEN} 1. 启动sing-box${NC}"
     echo -e "${GREEN} 2. 停止sing-box${NC}"
     echo -e "${GREEN} 3. 重启sing-box${NC}"
     echo -e "${GREEN} 4. 设为自启${NC}"
     echo -e "${GREEN} 5. 查看日志${NC}"
-    echo -e "${YELLOW}--- 配置与更新 ---${NC}"
+    echo -e "${BOLD}${YELLOW}--- 配置与更新 ---${NC}"
     echo -e "${GREEN} 6. 更新配置文件${NC}"
     echo -e "${GREEN} 7. 更新sing-box${NC}"
     echo -e "${GREEN} 8. 更新脚本${NC}"
     echo -e "${GREEN} 9. 证书申请${NC}"
-    echo -e "${YELLOW}--- 系统与网络 ---${NC}"
+    echo -e "${BOLD}${WHITE}--- 系统与网络 ---${NC}"
     echo -e "${GREEN}10. 更换XanMod内核${NC}"
     echo -e "${GREEN}11. 网络优化${NC}"
     echo -e "${GREEN}12. 手动配置防火墙${NC}"
