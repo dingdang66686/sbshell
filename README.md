@@ -39,7 +39,7 @@ bash <(curl -sL https://gh-proxy.com/https://raw.githubusercontent.com/qljsyph/D
 
 ## 适配配置文件：
 
-### 稳定版(1.11)：  
+### 发行版1.11：  
 tproxy：  
 https://gh-proxy.com/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/config_template/config_tproxy.json  
 
