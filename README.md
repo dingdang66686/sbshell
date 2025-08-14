@@ -46,6 +46,9 @@ https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/config_templat
 fakeiptun:
 https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/config_template/config_fakeiptun12.json
 
+tproxy:
+https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/config_template/config_trpoxy12.json
+
 ### 发行版1.11：  
 tproxy：  
 https://gh-proxy.com/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/config_template/config_tproxy.json  
