@@ -85,7 +85,7 @@ install_dependencies() {
         if [[ "$PKG_MANAGER" == "apt" ]]; then
             if ! dpkg -s "$pkg" &>/dev/null; then
                 echo -e "${YELLOW}安装依赖: $pkg...${RESET}"
-                apt install -y "$pkg" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：安装 $pkg 失败${RESET}" >&2; exit 1; }
+                apk add -y "$pkg" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：安装 $pkg 失败${RESET}" >&2; exit 1; }
             fi
         elif [[ "$PKG_MANAGER" == "yum" ]]; then
             if ! rpm -q "$pkg" &>/dev/null; then
@@ -129,7 +129,7 @@ configure_firewall() {
     elif [[ "$OS_TYPE" == "centos" || "$OS_TYPE" == "rhel" ]]; then
         firewall_cmd="firewall-cmd"
         firewall_service_name="firewalld"
-        systemctl is-active --quiet "$firewall_service_name" || { echo "  启动 Firewalld..."; systemctl start "$firewall_service_name" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：Firewalld 启动失败${RESET}" >&2; exit 1; }; }
+        systemctl is-active --quiet "$firewall_service_name" || { echo "  启动 Firewalld..."; rc-service "$firewall_service_name" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：Firewalld 启动失败${RESET}" >&2; exit 1; }; }
         # 检查并开放用户指定的 SSH 端口
         if ! "$firewall_cmd" --query-port="$ssh_port"/tcp >/dev/null 2>&1; then
             "$firewall_cmd" --zone=public --add-port="$ssh_port"/tcp --permanent >/dev/null || echo -e "${YELLOW}警告: 无法添加 Firewalld $ssh_port/tcp 规则。${RESET}" >&2
@@ -184,8 +184,8 @@ issue_cert() {
     # !!! Standalone 模式需要确保 80 端口在验证时可用。
     # !!! 添加 --force 参数以强制覆盖可能已存在的域密钥
     if ! "$ACME_CMD" --issue --standalone -d "$DOMAIN" --server "$CA_SERVER" --force \
-        --pre-hook "systemctl stop nginx 2>/dev/null || systemctl stop apache2 2>/dev/null || true" \
-        --post-hook "systemctl start nginx 2>/dev/null || systemctl start apache2 2>/dev/null || true" >/dev/null 2>&1; then
+        --pre-hook "rc-service nginx 2>/dev/null || rc-service apache2 2>/dev/null || true" \
+        --post-hook "rc-service nginx 2>/dev/null || rc-service apache2 2>/dev/null || true" >/dev/null 2>&1; then
         echo -e "${RED}❌ 错误：证书申请失败。${RESET}" >&2
         echo "  正在进行清理..." >&2
         "$ACME_CMD" --revoke -d "$DOMAIN" --server "$CA_SERVER" >/dev/null 2>&1 || true

@@ -16,8 +16,8 @@ mkdir -p "$TEMP_DIR"
 check_and_install_dependencies() {
     if ! command -v busybox &> /dev/null; then
         echo -e "\e[31mbusybox 未安装，正在安装...\e[0m"
-        apt-get update
-        apt-get install -y busybox
+        apk update
+        apk add -y busybox
         export PATH=$PATH:/bin/busybox
         chmod +x /bin/busybox
     fi
@@ -32,7 +32,7 @@ get_download_url() {
     DEFAULT_URL="https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
     
     if [ -f "$CONFIG_FILE" ]; then
-        URL=$(grep -E '(?<="external_ui_download_url": ")[^"]*' "$CONFIG_FILE")
+        URL=$(grep '"external_ui_download_url"' "$CONFIG_FILE" | sed 's/.*"external_ui_download_url": "\([^"]*\)".*/\1/')
         echo "${URL:-$DEFAULT_URL}"
     else
         echo "$DEFAULT_URL"
@@ -133,7 +133,7 @@ setup_auto_update_ui() {
 
 CONFIG_FILE="/etc/sing-box/config.json"
 DEFAULT_URL="https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
-URL=\$(grep -E '(?<="external_ui_download_url": ")[^"]*' "\$CONFIG_FILE")
+URL=\$(grep '"external_ui_download_url"' "\$CONFIG_FILE" | sed 's/.*"external_ui_download_url": "\([^"]*\)".*/\1/')
 URL="\${URL:-\$DEFAULT_URL}"
 
 TEMP_DIR="/tmp/sing-box-ui"
@@ -172,7 +172,7 @@ EOF
         echo -e "\e[32m定时更新任务已设置,每月1号执行一次\e[0m"
     fi
 
-    systemctl restart cron
+    rc-service crond restart
 }
 
 update_ui() {

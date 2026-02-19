@@ -11,7 +11,7 @@ MANUAL_FILE="/etc/sing-box/manual.conf"
 DEFAULTS_FILE="/etc/sing-box/defaults.conf"
 
 # 获取当前模式
-MODE=$(grep -E '(?<=^MODE=).*' /etc/sing-box/mode.conf)
+MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
 
 
 prompt_user_input() {
@@ -135,8 +135,7 @@ else
 fi
 
 # 重启sing-box并检查启动状态
-systemctl restart sing-box
-
+rc-service sing-box restart
 if systemctl is-active --quiet sing-box; then
     echo -e "${GREEN}sing-box 启动成功${NC}"
 else

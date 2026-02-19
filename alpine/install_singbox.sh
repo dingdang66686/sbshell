@@ -23,7 +23,7 @@ Signed-By: /etc/apt/keyrings/sagernet.asc
 
     # 始终更新包列表
     echo "正在更新包列表，请稍候..."
-    apt-get update -qq > /dev/null 2>&1
+    apk update -qq > /dev/null 2>&1
 
     # 选择安装稳定版或测试版
     while true; do
@@ -31,13 +31,13 @@ Signed-By: /etc/apt/keyrings/sagernet.asc
         case $version_choice in
             1)
                 echo "安装稳定版..."
-                apt-get install sing-box -yq > /dev/null 2>&1
+                apk add sing-box -yq > /dev/null 2>&1
                 echo "安装已完成"
                 break
                 ;;
             2)
                 echo "安装测试版..."
-                apt-get install sing-box-beta -yq > /dev/null 2>&1
+                apk add sing-box-beta -yq > /dev/null 2>&1
                 echo "安装已完成"
                 break
                 ;;
@@ -129,8 +129,7 @@ Signed-By: /etc/apt/keyrings/sagernet.asc
     fi 
         # 重启 sing-box 服务
         systemctl daemon-reload
-        systemctl restart sing-box
-
+        rc-service sing-box restart
         echo -e "${CYAN}sing-box 服务已重启${NC}"      
     else
         echo -e "${RED}sing-box 安装失败，请检查日志或网络配置${NC}"

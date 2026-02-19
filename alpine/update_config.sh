@@ -39,7 +39,11 @@ if wget -O "$CONFIG_FILE" --no-check-certificate "$config_url"; then
     echo -e "${GREEN}配置文件下载成功！${NC}"
     echo "$config_url" > "$CONFIG_URL_FILE"
     echo -e "${CYAN}正在重启 sing-box 服务...${NC}"
-    systemctl restart sing-box
+    if command -v rc-service >/dev/null 2>&1; then
+        rc-service sing-box restart
+    elif command -v systemctl >/dev/null 2>&1; then
+        systemctl restart sing-box
+    fi
     echo -e "${GREEN}服务已重启。${NC}"
 else
     echo -e "${RED}配置文件下载失败，请检查链接是否正确或网络连接。${NC}"

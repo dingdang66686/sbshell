@@ -11,8 +11,7 @@ SCRIPT_DIR="/etc/sing-box/scripts"
 
 # 停止 sing-box 服务
 stop_singbox() {
-    systemctl stop sing-box
-
+    rc-service sing-box restart
     if ! systemctl is-active --quiet sing-box; then
         echo -e "${GREEN}sing-box 已停止${NC}"
 

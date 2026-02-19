@@ -18,13 +18,13 @@ fi
 
 # 更新软件包列表
 echo "正在更新软件包列表..."
-apt update || error "更新软件包列表失败。"
+apk update || error "更新软件包列表失败。"
 
 # 安装必要工具（gpg 和 curl）
 for cmd in gpg curl; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "正在安装 $cmd..."
-        apt install "$cmd" -y || error "安装 $cmd 失败。"
+        apk add "$cmd" -y || error "安装 $cmd 失败。"
     fi
 done
 
@@ -62,7 +62,7 @@ fi
 
 # 更新软件包列表以包含新仓库
 echo "正在更新软件包列表（包括 XanMod 仓库）..."
-apt update || error "添加仓库后更新软件包列表失败。"
+apk update || error "添加仓库后更新软件包列表失败。"
 
 # 检测 CPU 指令集
 echo "正在检测 CPU 指令集..."
@@ -114,7 +114,7 @@ esac
 
 # 安装合适的 XanMod 内核
 echo "正在安装 $kernel_package..."
-apt install "$kernel_package" -y || error "安装 $kernel_package 失败。"
+apk add "$kernel_package" -y || error "安装 $kernel_package 失败。"
 
 # 提示系统重启
 echo "系统将在 10 秒后重启，按 Ctrl+C 可取消。"

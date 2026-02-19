@@ -10,7 +10,7 @@ echo "请选择操作(1: 启用自启动, 2: 禁用自启动）"
 read -rp "(1/2): " autostart_choice
 
 apply_firewall() {
-    MODE=$(grep -E '(?<=^MODE=).*' /etc/sing-box/mode.conf)
+    MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
     if [ "$MODE" = "TProxy" ]; then
         echo "应用 TProxy 模式下的防火墙规则..."
         bash /etc/sing-box/scripts/configure_tproxy.sh
@@ -62,8 +62,8 @@ EOF'
 
         # 启用并启动服务
         systemctl daemon-reload
-        systemctl enable nftables-singbox.service sing-box.service
-        systemctl start nftables-singbox.service sing-box.service
+        rc-update add nftables-singbox.service sing-box.service
+        rc-service nftables-singbox.service sing-box.service
         cmd_status=$?
 
         if [ "$cmd_status" -eq 0 ]; then
@@ -82,10 +82,10 @@ EOF'
         echo -e "${RED}禁用自启动...${NC}"
         
         # 禁用并停止服务
-        systemctl disable sing-box.service
-        systemctl disable nftables-singbox.service
-        systemctl stop sing-box.service
-        systemctl stop nftables-singbox.service
+        rc-update del sing-box.service
+        rc-update del nftables-singbox.service
+        rc-service sing-box.service
+        rc-service nftables-singbox.service
 
         # 删除 nftables-singbox.service 文件
         rm -f /etc/systemd/system/nftables-singbox.service

@@ -21,7 +21,7 @@ check_mode() {
 
 # 应用防火墙规则
 apply_firewall() {
-    MODE=$(grep -E '(?<=^MODE=).*' /etc/sing-box/mode.conf)
+    MODE=$(grep -E '^MODE=' /etc/sing-box/mode.conf | sed 's/^MODE=//')
     if [ "$MODE" = "TProxy" ]; then
         bash "$SCRIPT_DIR/configure_tproxy.sh"
     elif [ "$MODE" = "TUN" ]; then
@@ -54,7 +54,7 @@ start_singbox() {
         echo -e "${CYAN}当前网络环境非代理网络，可以启动 sing-box。${NC}"
     fi
 
-    systemctl restart sing-box &>/dev/null
+    rc-service sing-box &>/dev/null
     
     apply_firewall
 

@@ -5,7 +5,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo "正在检测sing-box最新版本..."
-apt-get update -qq > /dev/null 2>&1
+apk update -qq > /dev/null 2>&1
 
 if command -v sing-box &> /dev/null; then
     current_version=$(sing-box version | grep 'sing-box version' | awk '{print $3}')

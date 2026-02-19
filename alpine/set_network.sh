@@ -62,7 +62,11 @@ EOL
         done
 
         # 重启网络服务
-        systemctl restart networking
+        if command -v rc-service >/dev/null 2>&1; then
+            rc-service networking restart
+        elif command -v systemctl >/dev/null 2>&1; then
+            systemctl restart networking
+        fi
 
         # 输出配置结果
         echo -e "${GREEN}静态 IP 地址和 DNS 配置完成！${NC}"

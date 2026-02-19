@@ -35,7 +35,7 @@ else
 fi
 
 # 重启 sing-box 服务
-systemctl restart sing-box
+rc-service sing-box restart
 EOF
 
 chmod a+x /etc/sing-box/update-singbox.sh
@@ -75,8 +75,7 @@ while true; do
 
         # 添加新的定时任务
         (crontab -l 2>/dev/null; echo "0 */$interval_choice * * * /etc/sing-box/update-singbox.sh") | crontab -
-        systemctl restart cron
-
+        rc-service crond restart
         echo "定时更新任务已设置，每 $interval_choice 小时执行一次"
         break
 
@@ -84,7 +83,7 @@ while true; do
         # 取消自动更新任务
         if crontab -l 2>/dev/null | grep -q '/etc/sing-box/update-singbox.sh'; then
             crontab -l 2>/dev/null | grep -v '/etc/sing-box/update-singbox.sh' | crontab -
-            systemctl restart cron
+            rc-service crond restart
             echo -e "${CYAN}自动更新任务已取消。${NC}"
         else
             echo -e "${CYAN}没有找到自动更新任务。${NC}"

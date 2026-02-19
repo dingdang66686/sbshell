@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # 定义颜色
 CYAN='\033[0;36m'
@@ -7,12 +7,23 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+# Alpine 通常不使用 UFW，而是使用 iptables 或 nftables
+echo -e "${YELLOW}注意: Alpine Linux 通常不使用 UFW。${NC}"
+echo -e "${YELLOW}建议使用 iptables 或 nftables 直接配置防火墙。${NC}"
+echo -e "${YELLOW}本脚本将尝试安装 UFW，但可能无法正常工作。${NC}"
+echo ""
+read -p "是否继续? (y/n): " continue_choice
+if [ "$continue_choice" != "y" ] && [ "$continue_choice" != "Y" ]; then
+    echo -e "${CYAN}已取消。${NC}"
+    exit 0
+fi
+
 # --- 非交互式/自动模式 ---
 if [ "$1" == "--auto" ]; then
     # 确保 UFW 已安装
     if ! command -v ufw &>/dev/null; then
-        apt-get update >/dev/null 2>&1
-        apt-get install -y ufw >/dev/null 2>&1
+        apk update >/dev/null 2>&1
+        apk add ufw >/dev/null 2>&1
     fi
     # 应用基本规则
     ufw default deny incoming >/dev/null
@@ -29,11 +40,11 @@ fi
 
 # 1. 更新和安装
 echo -e "${CYAN}正在更新软件包列表...${NC}"
-apt-get update >/dev/null 2>&1
+apk update >/dev/null 2>&1
 
 if ! command -v ufw &>/dev/null; then
     echo -e "${CYAN}正在安装 UFW 防火墙...${NC}"
-    if apt-get install -y ufw >/dev/null 2>&1; then
+    if apk add -y ufw >/dev/null 2>&1; then
         echo -e "${GREEN}UFW 安装成功。${NC}"
     else
         echo -e "${RED}UFW 安装失败！请检查 apt 源或手动安装。${NC}"
@@ -84,7 +95,7 @@ if [[ "$ssh_modify" =~ ^[Yy]$ ]]; then
         echo -e "${GREEN}防火墙已放行新 SSH 端口 $new_ssh_port。${NC}"
         
         # 重启 SSH 服务
-        systemctl restart sshd
+        rc-service sshd restart
         echo -e "${GREEN}SSH 服务已重启，新端口已生效。${NC}"
         echo -e "${YELLOW}请记得使用新端口 ($new_ssh_port) 重新连接！${NC}"
     else

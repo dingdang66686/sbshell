@@ -1,14 +1,23 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 # ===== 时间同步 =====
 if ! command -v chronyd >/dev/null 2>&1; then
-    apt-get update && apt-get install -y chrony
+    apk update && apk add chrony
 fi
-if ! systemctl is-active --quiet chronyd; then
-    systemctl enable --now chronyd
+if command -v rc-service >/dev/null 2>&1; then
+    rc-service chronyd start 2>/dev/null || true
+    rc-update add chronyd 2>/dev/null || true
+elif command -v systemctl >/dev/null 2>&1; then
+    systemctl start chronyd 2>/dev/null || true
+    systemctl enable chronyd 2>/dev/null || true
 fi
-timedatectl set-timezone Asia/Shanghai 2>/dev/null || true
+# Alpine may not have timedatectl, use alternative
+if command -v timedatectl >/dev/null 2>&1; then
+    timedatectl set-timezone Asia/Shanghai 2>/dev/null || true
+else
+    setup-timezone -z Asia/Shanghai 2>/dev/null || true
+fi
 
 # ===== 文件描述符限制 =====
 echo "1048576" > /proc/sys/fs/file-max
