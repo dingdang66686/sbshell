@@ -54,16 +54,31 @@ start_singbox() {
         echo -e "${CYAN}当前网络环境非代理网络，可以启动 sing-box。${NC}"
     fi
 
-    rc-service sing-box &>/dev/null
+    if command -v rc-service >/dev/null 2>&1; then
+        rc-service sing-box start &>/dev/null
+    elif command -v systemctl >/dev/null 2>&1; then
+        systemctl start sing-box &>/dev/null
+    fi
     
     apply_firewall
 
-    if systemctl is-active --quiet sing-box; then
-        echo -e "${GREEN}sing-box 启动成功${NC}"
-        mode=$(check_mode)
-        echo -e "${MAGENTA}当前启动模式: ${mode}${NC}"
-    else
-        echo -e "${RED}sing-box 启动失败，请检查日志${NC}"
+    # Check if service is running
+    if command -v rc-service >/dev/null 2>&1; then
+        if rc-status | grep -q "sing-box.*started"; then
+            echo -e "${GREEN}sing-box 启动成功${NC}"
+            mode=$(check_mode)
+            echo -e "${MAGENTA}当前启动模式: ${mode}${NC}"
+        else
+            echo -e "${RED}sing-box 启动失败，请检查日志${NC}"
+        fi
+    elif command -v systemctl >/dev/null 2>&1; then
+        if systemctl is-active --quiet sing-box; then
+            echo -e "${GREEN}sing-box 启动成功${NC}"
+            mode=$(check_mode)
+            echo -e "${MAGENTA}当前启动模式: ${mode}${NC}"
+        else
+            echo -e "${RED}sing-box 启动失败，请检查日志${NC}"
+        fi
     fi
 }
 

@@ -44,7 +44,7 @@ apk update >/dev/null 2>&1
 
 if ! command -v ufw &>/dev/null; then
     echo -e "${CYAN}正在安装 UFW 防火墙...${NC}"
-    if apk add -y ufw >/dev/null 2>&1; then
+    if apk add ufw >/dev/null 2>&1; then
         echo -e "${GREEN}UFW 安装成功。${NC}"
     else
         echo -e "${RED}UFW 安装失败！请检查 apt 源或手动安装。${NC}"

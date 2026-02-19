@@ -1,4 +1,17 @@
-#!/bin/bash
+#!/bin/sh
+
+# 定义颜色
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${YELLOW}注意: XanMod 内核仅适用于 Debian/Ubuntu 系统。${NC}"
+echo -e "${YELLOW}Alpine Linux 使用其自己的内核，不支持 XanMod 内核安装。${NC}"
+echo -e "${CYAN}您可以使用 'apk upgrade' 更新 Alpine 内核到最新版本。${NC}"
+exit 0
+
 
 # 本脚本用于添加 XanMod 内核仓库，获取必要的 GPG 密钥，
 # 检测 CPU 指令集，安装合适的 XanMod 内核版本，并重启系统。

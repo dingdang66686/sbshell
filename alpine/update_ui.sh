@@ -17,7 +17,7 @@ check_and_install_dependencies() {
     if ! command -v busybox &> /dev/null; then
         echo -e "\e[31mbusybox 未安装，正在安装...\e[0m"
         apk update
-        apk add -y busybox
+        apk add busybox
         export PATH=$PATH:/bin/busybox
         chmod +x /bin/busybox
     fi

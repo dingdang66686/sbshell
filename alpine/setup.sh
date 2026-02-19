@@ -85,7 +85,7 @@ install_dependencies() {
         if [[ "$PKG_MANAGER" == "apt" ]]; then
             if ! dpkg -s "$pkg" &>/dev/null; then
                 echo -e "${YELLOW}安装依赖: $pkg...${RESET}"
-                apk add -y "$pkg" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：安装 $pkg 失败${RESET}" >&2; exit 1; }
+                apk add "$pkg" >/dev/null 2>&1 || { echo -e "${RED}❌ 错误：安装 $pkg 失败${RESET}" >&2; exit 1; }
             fi
         elif [[ "$PKG_MANAGER" == "yum" ]]; then
             if ! rpm -q "$pkg" &>/dev/null; then

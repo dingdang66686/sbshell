@@ -14,11 +14,15 @@ fi
 
 # 停止 sing-box 服务
 function stop_singbox() {
-    rc-service sing-box restart
-    if ! systemctl is-active --quiet sing-box; then
-        echo "sing-box 已停止" >/dev/null
-    else
-        exit 1
+    if command -v rc-service >/dev/null 2>&1; then
+        rc-service sing-box stop
+    elif command -v systemctl >/dev/null 2>&1; then
+        systemctl stop sing-box
+        if ! systemctl is-active --quiet sing-box; then
+            echo "sing-box 已停止" >/dev/null
+        else
+            exit 1
+        fi
     fi
 }
 

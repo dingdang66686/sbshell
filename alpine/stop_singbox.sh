@@ -11,22 +11,29 @@ SCRIPT_DIR="/etc/sing-box/scripts"
 
 # 停止 sing-box 服务
 stop_singbox() {
-    rc-service sing-box restart
-    if ! systemctl is-active --quiet sing-box; then
+    if command -v rc-service >/dev/null 2>&1; then
+        rc-service sing-box stop
+        sleep 1
+        rc-status | grep -q "sing-box.*started" && echo -e "${RED}停止 sing-box 失败${NC}" && return 1
         echo -e "${GREEN}sing-box 已停止${NC}"
-
-        # 提示用户确认是否清理防火墙规则
-        read -rp "是否清理防火墙规则？(y/n): " confirm_cleanup
-        if [[ "$confirm_cleanup" =~ ^[Yy]$ ]]; then
-            echo -e "${CYAN}执行清理防火墙规则...${NC}"
-            bash "$SCRIPT_DIR/clean_nft.sh"
-            echo -e "${GREEN}防火墙规则清理完毕${NC}"
+    elif command -v systemctl >/dev/null 2>&1; then
+        systemctl stop sing-box
+        if ! systemctl is-active --quiet sing-box; then
+            echo -e "${GREEN}sing-box 已停止${NC}"
         else
-            echo -e "${CYAN}已取消清理防火墙规则。${NC}"
+            echo -e "${RED}停止 sing-box 失败，请检查日志${NC}"
+            return 1
         fi
+    fi
 
+    # 提示用户确认是否清理防火墙规则
+    read -rp "是否清理防火墙规则？(y/n): " confirm_cleanup
+    if [[ "$confirm_cleanup" =~ ^[Yy]$ ]]; then
+        echo -e "${CYAN}执行清理防火墙规则...${NC}"
+        bash "$SCRIPT_DIR/clean_nft.sh"
+        echo -e "${GREEN}防火墙规则清理完毕${NC}"
     else
-        echo -e "${RED}停止 sing-box 失败，请检查日志${NC}"
+        echo -e "${CYAN}已取消清理防火墙规则。${NC}"
     fi
 }
 
