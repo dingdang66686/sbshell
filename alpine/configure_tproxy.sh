@@ -10,7 +10,7 @@ else
     elif command -v iptables >/dev/null 2>&1; then
         FIREWALL="iptables"
     else
-        FIREWALL="nftables"
+        FIREWALL="iptables"
     fi
 fi
 
@@ -91,15 +91,12 @@ if [ "$MODE" = "TProxy" ]; then
     clearSingboxRules
 
     # 设置 IP 规则和路由
-    ip rule add fwmark $PROXY_FWMARK table $PROXY_ROUTE_TABLE
-    ip route add local default dev "$INTERFACE" table $PROXY_ROUTE_TABLE
+    ip -f inet rule add fwmark $PROXY_FWMARK lookup $PROXY_ROUTE_TABLE
+    ip -f inet route add local default dev "${INTERFACE}" table $PROXY_ROUTE_TABLE
     sysctl -w net.ipv4.ip_forward=1 > /dev/null
 
     # 确保目录存在
     mkdir -p /etc/sing-box/nft
-
-    # 手动创建 inet 表
-    nft add table inet sing-box
 
     # 设置 TProxy 模式下的 nftables 规则
     cat > /etc/sing-box/nft/nftables.conf <<EOF
@@ -129,8 +126,8 @@ table inet sing-box {
         # 保留地址绕过
         ip daddr @RESERVED_IPSET accept
 
-        #放行所有经过 DNAT 的流量
-        ct status dnat accept comment "Allow forwarded traffic"
+        # 优化已建立的 TCP 连接
+        meta l4proto tcp socket transparent 1 meta mark set $PROXY_FWMARK accept
 
         # 重定向剩余流量到 TProxy 端口并设置标记
         meta l4proto { tcp, udp } tproxy to :$TPROXY_PORT meta mark set $PROXY_FWMARK
@@ -167,14 +164,7 @@ table inet sing-box {
 EOF
 
     # 应用防火墙规则和 IP 路由
-    echo "Applying nftables rules..."  # 添加调试信息
     nft -f /etc/sing-box/nft/nftables.conf
-
-    # 检查是否有错误
-    if [ $? -ne 0 ]; then
-        echo "Error applying nftables rules. Please check the configuration."
-        exit 1
-    fi
 
     # 持久化防火墙规则
     nft list ruleset > /etc/nftables.conf

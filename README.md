@@ -2,7 +2,8 @@
 ⚠️⚠️请注意禁止搬运到中国大陆，请遵守属地法律法律⚠️⚠️  
 Sbshell 是一款针对 官方sing-box 的辅助运行脚本，旨在让官方sing-box更方便使用：
 
-- **系统支持**：支持系统为Debian/Ubuntu/Armbian以及OpenWrt。
+- **系统支持**：支持系统为Debian/Ubuntu/Armbian、Alpine以及OpenWrt。
+- **防火墙支持**：支持nftables和iptables两种防火墙，自动检测系统已安装的防火墙或提供手动选择。
 - **客户端运行**：客户端保持 sing-box 以官方裸核形式运行，追求极致精简与性能。
 - **服务端运行**：支持服务端配置搭建使用，使用方法自行google油管教程和翻阅sing-box官方文档。
 - **双模支持**：兼容 TUN 和 TProxy 模式，可随时一键切换，灵活适应不同需求。
@@ -25,9 +26,9 @@ Sbshell 是一款针对 官方sing-box 的辅助运行脚本，旨在让官方si
 bash <(curl -sL https://ghfast.top/https://raw.githubusercontent.com/qljsyph/sbshell/refs/heads/main/sbshall.sh)
 ```
 - 初始化运行结束，输入“**sb**”进入菜单
-- 目前支持系统为deiban/ubuntu/armbian/openwrt。  
-- 防火墙仅支持nftables，不支持iptables。
-- 非openwrt并使用2.1.2之前版本的用户想要升级并且使用1.12.X版本内核建议卸载重装
+- 目前支持系统为Debian/Ubuntu/Armbian/Alpine/OpenWRT。  
+- 防火墙支持nftables和iptables，安装时可自动检测或手动选择。
+- 非OpenWRT并使用2.1.2之前版本的用户想要升级并且使用1.12.X版本内核建议卸载重装
 
 ### 系统信息自动显示美化脚本： 
 ```

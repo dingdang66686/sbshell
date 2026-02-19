@@ -10,7 +10,7 @@ else
     elif command -v iptables >/dev/null 2>&1; then
         FIREWALL="iptables"
     else
-        FIREWALL="nftables"
+        FIREWALL="iptables"
     fi
 fi
 
@@ -24,6 +24,12 @@ fi
 
 # 以下是 nftables 的清理实现
 
-nft list table inet sing-box >/dev/null 2>&1 && nft delete table inet sing-box
+# 清理防火墙规则并停止服务
+if command -v rc-service >/dev/null 2>&1; then
+    rc-service sing-box stop 2>/dev/null || true
+elif command -v systemctl >/dev/null 2>&1; then
+    systemctl stop sing-box 2>/dev/null || true
+fi
+nft flush ruleset
 
-echo "sing-box 服务已停止, sing-box 相关的防火墙规则已清理."
+echo "sing-box 服务已停止,防火墙规则已清理."
