@@ -2,7 +2,7 @@
 
 # 检测防火墙类型
 if [ -f /etc/sing-box/firewall.conf ]; then
-    FIREWALL=$(grep -oP '(?<=^FIREWALL=).*' /etc/sing-box/firewall.conf)
+    FIREWALL=$(grep -E '^FIREWALL=' /etc/sing-box/firewall.conf | sed 's/^FIREWALL=//')
 else
     # 默认检测
     if command -v nft >/dev/null 2>&1; then
@@ -10,7 +10,7 @@ else
     elif command -v iptables >/dev/null 2>&1; then
         FIREWALL="iptables"
     else
-        FIREWALL="nftables"
+        FIREWALL="iptables"
     fi
 fi
 
@@ -18,7 +18,7 @@ fi
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 
 if [ "$FIREWALL" = "iptables" ]; then
-    bash "$SCRIPT_DIR/configure_tproxy_iptables.sh"
+    sh "$SCRIPT_DIR/configure_tproxy_iptables.sh"
     exit $?
 fi
 
@@ -36,7 +36,7 @@ ReservedIP4='{ 127.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 172.16.0.
 CustomBypassIP='{ 192.168.0.0/16, 10.0.0.0/8 }'  # 自定义绕过的 IP 地址集合
 
 # 读取当前模式
-MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
+MODE=$(grep -E '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 
 # 检查指定路由表是否存在
 check_route_exists() {
@@ -96,7 +96,7 @@ if [ "$MODE" = "TProxy" ]; then
     sysctl -w net.ipv4.ip_forward=1 > /dev/null
 
     # 确保目录存在
-    sudo mkdir -p /etc/sing-box/nft
+    mkdir -p /etc/sing-box/nft
 
     # 设置 TProxy 模式下的 nftables 规则
     cat > /etc/sing-box/nft/nftables.conf <<EOF

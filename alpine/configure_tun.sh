@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 # 检测防火墙类型
 if [ -f /etc/sing-box/firewall.conf ]; then
-    FIREWALL=$(grep -oP '(?<=^FIREWALL=).*' /etc/sing-box/firewall.conf)
+    FIREWALL=$(grep -E '^FIREWALL=' /etc/sing-box/firewall.conf | sed 's/^FIREWALL=//')
 else
     # 默认检测
     if command -v nft >/dev/null 2>&1; then
@@ -10,7 +10,7 @@ else
     elif command -v iptables >/dev/null 2>&1; then
         FIREWALL="iptables"
     else
-        FIREWALL="nftables"
+        FIREWALL="iptables"
     fi
 fi
 
@@ -18,7 +18,7 @@ fi
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 
 if [ "$FIREWALL" = "iptables" ]; then
-    bash "$SCRIPT_DIR/configure_tun_iptables.sh"
+    sh "$SCRIPT_DIR/configure_tun_iptables.sh"
     exit $?
 fi
 
@@ -30,7 +30,7 @@ PROXY_ROUTE_TABLE=100
 INTERFACE=$(ip route show default | awk '/default/ {print $5}')
 
 # 读取当前模式
-MODE=$(grep -oP '(?<=^MODE=).*' /etc/sing-box/mode.conf)
+MODE=$(grep -E '(?<=^MODE=).*' /etc/sing-box/mode.conf)
 
 # 清理 TProxy 模式的防火墙规则
 clearTProxyRules() {
@@ -47,7 +47,7 @@ if [ "$MODE" = "TUN" ]; then
     clearTProxyRules
 
     # 确保目录存在
-    sudo mkdir -p /etc/sing-box/tun
+    mkdir -p /etc/sing-box/tun
 
     # 设置 TUN 模式的具体配置
     cat > /etc/sing-box/tun/nftables.conf <<EOF
